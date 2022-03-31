@@ -18,8 +18,7 @@ async def create_model(msg: Message):
         group_id=msg.grouped_id
     )
     try:
-        # await tg_msg.create()
-        pass
+        await tg_msg.create()
     except Exception as ex:
         print(ex)
         # return
