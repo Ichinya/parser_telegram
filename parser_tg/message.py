@@ -18,7 +18,8 @@ async def create_model(msg: Message):
         group_id=msg.grouped_id
     )
     try:
-        await tg_msg.create()
+        # await tg_msg.create()
+        pass
     except Exception as ex:
         print(ex)
         # return
@@ -36,14 +37,15 @@ async def create_media(msg: Message):
         print('Empty media')
         return
     path = ''
+    filename = ''
     try:
-        path = await client.download_media(msg, 'media\\', progress_callback=callback)
-        filename = basename(path)
+        path = await client.download_media(msg, './media/', progress_callback=callback)
+        filename = basename(path).split('/')[-1]
         new_path = path.replace(filename, slugify(filename))
+        filename = new_path.split('/')[-1]
         if path != new_path:
             os.rename(path, new_path)
             path = new_path
-
     except Exception as ex:
         print(ex)
         exit('Выход при скачивании файла')
@@ -55,14 +57,14 @@ async def create_media(msg: Message):
             message_id=f"{msg.peer_id.channel_id}.{msg.id}",
             msg_id=msg.id,
             group_id=msg.grouped_id,
-            file=path,
+            file=filename,
             date=media.date.replace(tzinfo=None)
         )
         await tg_media.create()
-        is_upload = upload_file(tg_media.file, tg_media.file.replace('\\', '/'))
+        is_upload = upload_file(path, 'media/' + tg_media.file)
         if is_upload:
             await tg_media.update(storage=True).apply()
-            os.remove(tg_media.file)
+            os.remove(path)
     except Exception as ex:
         print(ex)
 
