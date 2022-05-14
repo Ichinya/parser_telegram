@@ -9,12 +9,17 @@ from slugify import slugify
 
 
 async def create_model(msg: Message):
+    urls = []
+    for e in msg.entities or []:
+        print(e)
+        if not e is None and hasattr(e, 'url'):
+            urls.append(e.url)
     tg_msg = TgMessage(
         id=f"{msg.peer_id.channel_id}.{msg.id}",
         msg_id=msg.id,
         channel_id=msg.peer_id.channel_id,
         date=msg.date.replace(tzinfo=None),
-        text=msg.message,
+        text=(msg.message or '') + '\n' + '\n'.join(urls),
         group_id=msg.grouped_id
     )
     try:
