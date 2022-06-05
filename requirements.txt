@@ -4,5 +4,5 @@ Telethon==1.24.0
 Gino==1.0.1
 SQLAlchemy~=1.3.24
 python-slugify==6.1.2
-boto3==1.23.0
-botocore==1.26.0
+boto3==1.24.2
+botocore==1.27.2
